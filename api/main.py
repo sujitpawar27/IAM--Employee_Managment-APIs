@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.Routes.employee_routes import router
-from api.Database.db import Base, engine
-from api.Routes.department_route import router as department_router
-
+from .Routes.employee_routes import router
+from .Database.db import Base, engine
+from .Routes.department_route import router as department_router
 
 Base.metadata.create_all(bind=engine)
 print("Database created")
