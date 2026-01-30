@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from api.Models.employee_model import User
-from api.Schema.employee_schema import UserCreate, UserUpdate
+from ..Models.employee_model import User
+from ..Schema.employee_schema import UserCreate, UserUpdate
 
 def create_user(db: Session, user: UserCreate):
     db_user = User(**user.dict())
