@@ -4,7 +4,6 @@ from api.Routes.employee_routes import router
 from api.Database.db import Base, engine
 from api.Routes.department_route import router as department_router
 
-
 Base.metadata.create_all(bind=engine)
 print("Database created")
 
