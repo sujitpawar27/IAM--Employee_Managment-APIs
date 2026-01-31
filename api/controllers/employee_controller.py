@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import text
 from ..Models.employee_model import User
 from ..Schema.employee_schema import UserCreate, UserUpdate
@@ -18,17 +18,38 @@ def get_users(db: Session):
             u.name,
             u.email,
             u.role,
-            d.name AS department
+            d.name AS department_name
         FROM users u
         LEFT JOIN departments d
             ON u.department_id = d.id
     """)
 
-    result = db.execute(query)
-    return result.mappings().all()
+    result = db.execute(query).mappings().all()
+
+    users = []
+    for row in result:
+        users.append({
+            "id": row["id"],
+            "name": row["name"],
+            "email": row["email"],
+            "role": row["role"],
+            "department": (
+                {"name": row["department_name"]}
+                if row["department_name"] is not None
+                else None
+            )
+        })
+
+    return users
+
 
 def get_user(db: Session, user_id: int):
-    return db.query(User).filter(User.id == user_id).first()
+    return (
+        db.query(User)
+        .options(joinedload(User.department))
+        .filter(User.id == user_id)
+        .first()
+    )
 
 def update_user(db: Session, user_id: int, data: UserUpdate):
     user = get_user(db, user_id)

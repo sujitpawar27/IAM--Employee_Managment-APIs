@@ -3,8 +3,7 @@ from sqlalchemy.orm import Session
 from ..Schema.employee_schema import UserCreate, UserUpdate, UserResponse
 from ..controllers import employee_controller
 from ..Database.deps import get_db
-from ..Models.department_model import Department
-
+from ..controllers.employee_controller import get_user
 router = APIRouter()
 
 @router.post("/", response_model=UserResponse)
@@ -16,8 +15,8 @@ def read_all(db: Session = Depends(get_db)):
     return employee_controller.get_users(db)
 
 @router.get("/{user_id}", response_model=UserResponse)
-def read(user_id: int, db: Session = Depends(get_db)):
-    user = employee_controller.get_user(db, user_id)
+def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
+    user = get_user(db, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
@@ -36,7 +35,4 @@ def delete(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return {"message": "User deleted"}
 
-@router.get("/with-department")
-def get_users_with_department(db: Session = Depends(get_db)):
-    return employee_controller.get_users_with_department_raw(db)
 

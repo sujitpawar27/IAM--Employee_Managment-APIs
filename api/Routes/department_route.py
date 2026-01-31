@@ -7,4 +7,6 @@ router = APIRouter()
 
 @router.get("")
 def get_departments(db: Session = Depends(get_db)):
-    return db.query(Department).all()
+        departments = db.query(Department).all()
+        return departments
+
