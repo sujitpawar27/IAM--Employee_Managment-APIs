@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from .department_schema import DepartmentResponse
 from typing import Optional
 
 class UserCreate(BaseModel):
@@ -18,7 +19,6 @@ class UserResponse(BaseModel):
     name: str
     email: str
     role: str
-    department: Optional[str] = None
+    department: DepartmentResponse | None
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
