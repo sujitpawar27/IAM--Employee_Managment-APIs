@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from api.Database.db import Base
+from sqlalchemy.orm import relationship
+from ..Database.db import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -10,3 +11,6 @@ class User(Base):
     role = Column(String, nullable=False)
 
     department_id = Column(Integer, ForeignKey("departments.id"))
+
+
+    department = relationship("Department", back_populates="users")

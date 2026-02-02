@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.Routes.employee_routes import router
-from api.Database.db import Base, engine
-from api.Routes.department_route import router as department_router
-
+from .Routes.employee_routes import router
+from .Database.db import Base, engine
+from .Routes.department_route import router as department_router
 
 Base.metadata.create_all(bind=engine)
 print("Database created")
@@ -12,10 +11,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
